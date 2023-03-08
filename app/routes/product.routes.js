@@ -1,10 +1,18 @@
-module.exports = app => {
-  const products = require("../controllers/product.controller.js");
+const { authJwt } = require("../middleware");
+const products = require("../controllers/product.controller.js");
+var router = require("express").Router();
 
-  var router = require("express").Router();
+module.exports = function (app) {
+  app.use(function (req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "authorization, Origin, Content-Type, Accept"
+    );
+    next();
+  });
 
   // Create a new Product
-  router.post("/", products.create);
+  router.post("/", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.create);
 
   // Retrieve all Products
   router.get("/", products.findAll);
@@ -13,13 +21,13 @@ module.exports = app => {
   router.get("/:id", products.findOne);
 
   // Update a Product with id
-  router.put("/:id", products.update);
+  router.put("/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.update);
 
   // Delete a Product with id
-  router.delete("/:id", products.delete);
+  router.delete("/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.delete);
 
   // Delete all products
-  router.delete("/", products.deleteAll);
+  router.delete("/", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.deleteAll);
 
   app.use('/api/products', router);
 };
