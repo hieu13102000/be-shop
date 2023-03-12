@@ -11,23 +11,23 @@ module.exports = function (app) {
     next();
   });
 
-  // Create a new Product
-  router.post("/", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.create);
+  // Api create a new Product
+  router.post("/create-product", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.create);
 
-  // Retrieve all Products
-  router.get("/", products.findAll);
+  // Api get list Product
+  router.get("/list-product", products.getListProducts);
 
-  // Retrieve a single Product with id
-  router.get("/:id", products.findOne);
+  // Api get detail Product
+  router.get("/detail-product/:id", products.getDetailProduct);
 
-  // Update a Product with id
-  router.put("/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.update);
+  // Api update a Product with id
+  router.put("/update-product/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.update);
 
-  // Delete a Product with id
-  router.delete("/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.delete);
+  // Api delete a Product with id
+  router.delete("/delete-product/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.delete);
 
-  // Delete all products
-  router.delete("/", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.deleteAll);
+  // Api delete many products
+  router.delete("/delete-products", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.deleteAll);
 
-  app.use('/api/products', router);
+  app.use('/', router);
 };

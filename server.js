@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));   /* bodyParser.urlencoded() is
 
 app.use(
   cookieSession({
-    name: "bezkoder-session",
+    name: "dinhhieu-session",
     secret: "COOKIE_SECRET", // should use as secret environment variable
     httpOnly: true
   })
@@ -28,6 +28,8 @@ app.use(
 
 const db = require("./app/models");
 const Role = db.role;
+const Brand = db.brand;
+const Category = db.category;
 
 db.sequelize.sync({ force: true }).then(() => {
   console.log('Drop and Resync Db');
@@ -36,18 +38,27 @@ db.sequelize.sync({ force: true }).then(() => {
 // initial() function helps us to create 3 rows in database.
 function initial() {
   Role.create({
-    id: 1,
-    name: "user"
+    roleId: 1,
+    roleName: "user"
   });
 
   Role.create({
-    id: 2,
-    name: "moderator"
+    roleId: 2,
+    roleName: "moderator"
   });
 
   Role.create({
-    id: 3,
-    name: "admin"
+    roleId: 3,
+    roleName: "admin"
+  });
+
+  Brand.create({
+    brandId: 1,
+    brandName: "guchi"
+  });
+  Category.create({
+    categoryId: 1,
+    categoryName: "son"
   });
 }
 

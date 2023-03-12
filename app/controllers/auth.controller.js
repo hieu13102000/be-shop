@@ -10,15 +10,15 @@ const bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
     // Save User to Database
     User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        userName: req.body.username,
+        userEmail: req.body.email,
+        userPassword: bcrypt.hashSync(req.body.password, 8)
     })
         .then(user => {
             if (req.body.roles) {
                 Role.findAll({
                     where: {
-                        name: {
+                        roleName: {
                             [Op.or]: req.body.roles
                         }
                     }
@@ -42,7 +42,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     User.findOne({
         where: {
-            username: req.body.username
+            userName: req.body.username
         }
     })
         .then(async (user) => {
@@ -52,7 +52,7 @@ exports.signin = (req, res) => {
 
             const passwordIsValid = bcrypt.compareSync(
                 req.body.password,
-                user.password
+                user.userPassword
             );
 
             if (!passwordIsValid) {
@@ -62,7 +62,7 @@ exports.signin = (req, res) => {
                 });
             }
 
-            const token = jwt.sign({ id: user.id }, config.secret, {
+            const token = jwt.sign({ id: user.userId }, config.secret, {
                 expiresIn: config.jwtExpiration
             });
 
@@ -71,11 +71,11 @@ exports.signin = (req, res) => {
             let authorities = [];
             user.getRoles().then(roles => {
                 for (let i = 0; i < roles.length; i++) {
-                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                    authorities.push("ROLE_" + roles[i].roleName.toUpperCase());
                 }
 
                 res.status(200).send({
-                    id: user.id,
+                    userId: user.userId,
                     username: user.username,
                     email: user.email,
                     roles: authorities,
@@ -127,7 +127,7 @@ exports.refreshToken = async (req, res) => {
         }
 
         const user = await refreshToken.getUser();
-        let newAccessToken = jwt.sign({ id: user.id }, config.secret, {
+        let newAccessToken = jwt.sign({ id: user.userId }, config.secret, {
             expiresIn: config.jwtExpiration,
         });
 

@@ -1,20 +1,34 @@
-module.exports = (sequelize, Sequelize) => {
-    const Product = sequelize.define("product", {
-      name: {
-        type: Sequelize.STRING,
-      },
-      price: {
-        type: Sequelize.FLOAT
-      },
-      image: {
-        type: Sequelize.STRING
-      },
-      madeIn: {
-        type: Sequelize.STRING
-      },
-      brand: {
-        type: Sequelize.STRING
-      }
-    });
-    return Product;
-  };
+module.exports = (sequelize, DataTypes) => {
+  const Product = sequelize.define("products", {
+    productId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    productName: {
+      type: DataTypes.STRING,
+    },
+    productOldPrice: {
+      type: DataTypes.FLOAT
+    },
+    productPrice: {
+      type: DataTypes.FLOAT
+    },
+    productImage: {
+      type: DataTypes.STRING
+    },
+    productMadeIn: {
+      type: DataTypes.STRING
+    },
+    productSaleOff: {
+      type: DataTypes.STRING
+    },
+    productSex: {
+      type: DataTypes.STRING
+    },
+    productColor: {
+      type: DataTypes.STRING
+    },
+  });
+  return Product;
+};

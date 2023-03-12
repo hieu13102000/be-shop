@@ -39,7 +39,7 @@ isAdmin = async (req, res, next) => {
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === "admin") {
+            if (roles[i].roleName === "admin") {
                 return next();
             }
         }
@@ -60,7 +60,7 @@ isModerator = async (req, res, next) => {
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === "moderator") {
+            if (roles[i].roleName === "moderator") {
                 return next();
             }
         }
@@ -81,11 +81,11 @@ isModeratorOrAdmin = async (req, res, next) => {
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === "moderator") {
+            if (roles[i].roleName === "moderator") {
                 return next();
             }
 
-            if (roles[i].name === "admin") {
+            if (roles[i].roleName === "admin") {
                 return next();
             }
         }

@@ -1,5 +1,8 @@
 const db = require("../models");
+// import model
 const Product = db.products;
+const Brand = db.brand;
+const Category = db.category;
 const Op = db.Sequelize.Op;
 
 const { check, validationResult } = require('express-validator');
@@ -10,7 +13,7 @@ exports.create = [
   check('price').notEmpty().isNumeric().withMessage('Price must be a number.'),
   check('image').notEmpty().isURL().withMessage('Image must be a valid URL.'),
   check('madeIn').notEmpty().withMessage('Made in cannot be empty.'),
-  check('brand').notEmpty().withMessage('Brand cannot be empty.'),
+  check('brandId').notEmpty().withMessage('BrandId cannot be empty.'),
   // handle request
   (req, res) => {
     // check validation result
@@ -20,17 +23,20 @@ exports.create = [
     }
     // create a product
     const product = {
-      name: req.body.name,
-      price: req.body.price,
-      image: req.body.image,
-      madeIn: req.body.madeIn,
-      brand: req.body.brand
+      productName: req.body.name,
+      productPrice: req.body.price,
+      productImage: req.body.image,
+      productMadeIn: req.body.madeIn,
+      brandId: req.body.brandId,
+      categoryId: req.body.categoryId,
     };
 
     // save product in the database
     Product.create(product)
       .then(data => {
-        res.status(200).send(data);
+        res.status(200).send({
+          message: `Created the Product id:${data.productId} successfully!`
+        });
       })
       .catch(err => {
         res.status(500).send({
@@ -41,14 +47,49 @@ exports.create = [
   }
 ];
 
-// Retrieve all Products from the database.
-exports.findAll = (req, res) => {
+// get list Products from the database.
+exports.getListProducts = (req, res) => {
   const name = req.query.name;
-  var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 10;
+  const offset = (page - 1) * pageSize;
+  const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
 
-  Product.findAll({ where: condition })
+  Product.findAndCountAll({
+    where: condition,
+    include: [{
+      model: Brand,
+      attributes: ['brandName']
+    }, {
+      model: Category,
+      attributes: ['categoryName']
+    }],
+    limit: pageSize,
+    offset: offset
+  })
     .then(data => {
-      res.status(200).send(data);
+      const currentData = data.rows.map(product => {
+        return {
+          productId: product.productId,
+          productName: product.productName,
+          productPrice: product.productPrice,
+          productImage: product.productImage,
+          productMadeIn: product.productMadeIn,
+          productSaleOff: product.productSaleOff,
+          brandName: product.brand ? product.brand.brandName : null,
+          categoryName: product.category ? product.category.categoryName : null,
+        };
+      });
+      const totalItems = data.count;
+      const totalPages = Math.ceil(totalItems / pageSize);
+
+      res.status(200).send({
+        data: currentData,
+        currentPage: page,
+        pageSize: pageSize,
+        totalItems: totalItems,
+        totalPages: totalPages,
+      });
     })
     .catch(err => {
       res.status(500).send({
@@ -58,14 +99,25 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single Product with an id
-exports.findOne = (req, res) => {
+// get detail Product from the database.
+exports.getDetailProduct = (req, res) => {
   const id = req.params.id;
 
-  Product.findByPk(id)
+  Product.findByPk(id, {
+    include: [{ model: Brand }, { model: Category }]
+  })
     .then(data => {
       if (data) {
-        res.status(200).send(data);
+        const currentData = {
+          productId: data.productId,
+          productName: data.productName,
+          productPrice: data.productPrice,
+          productImage: data.productImage,
+          productMadeIn: data.productMadeIn,
+          brandName: data.brand ? data.brand.brandName : null,
+          categoryName: data.category ? data.category.categoryName : null,
+        };
+        res.status(200).send(currentData);
       } else {
         res.status(404).send({
           message: `Cannot find Product with id=${id}.`
@@ -82,9 +134,16 @@ exports.findOne = (req, res) => {
 // Update a Product by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-
-  Product.update(req.body, {
-    where: { id: id }
+  const product = {
+    productName: req.body.name,
+    productPrice: req.body.price,
+    productImage: req.body.image,
+    productMadeIn: req.body.madeIn,
+    brandId: req.body.brandId,
+    categoryId: req.body.categoryId,
+  };
+  Product.update(product, {
+    where: { productId: id }
   })
     .then(num => {
       if (num == 1) {
@@ -109,7 +168,7 @@ exports.delete = (req, res) => {
   const id = req.params.id;
 
   Product.destroy({
-    where: { id: id }
+    where: { productId: id }
   })
     .then(num => {
       if (num == 1) {
@@ -129,11 +188,11 @@ exports.delete = (req, res) => {
     });
 };
 
-// Delete all Products from the database.
+// Delete Products from the database.
 exports.deleteAll = (req, res) => {
+  const ids = req.body.productIds; // Assuming an array of productIds is sent in the request body
   Product.destroy({
-    where: {},
-    truncate: false
+    where: { productId: ids },
   })
     .then(nums => {
       res.status(200).send({ message: `${nums} Products were deleted successfully!` });
