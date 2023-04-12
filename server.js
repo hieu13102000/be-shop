@@ -26,48 +26,12 @@ app.use(
   })
 );
 
-// const db = require("./app/models");
-// const Role = db.role;
-// const Brand = db.brand;
-// const Category = db.category;
-
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log('Drop and Resync Db');
-//   initial();
-// });
-// // initial() function helps us to create 3 rows in database.
-// function initial() {
-//   Role.create({
-//     roleId: 1,
-//     roleName: "user"
-//   });
-
-//   Role.create({
-//     roleId: 2,
-//     roleName: "moderator"
-//   });
-
-//   Role.create({
-//     roleId: 3,
-//     roleName: "admin"
-//   });
-
-//   Brand.create({
-//     brandId: 1,
-//     brandName: "guchi"
-//   });
-//   Category.create({
-//     categoryId: 1,
-//     categoryName: "son"
-//   });
-// }
-
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
 
-// routes
+// map routes
 const fs = require('fs');
 const routePath = './app/routes';
 fs.readdirSync(routePath).forEach((file) => {
@@ -76,6 +40,9 @@ fs.readdirSync(routePath).forEach((file) => {
     route(app);
   }
 });
+// cron Jobs
+const cronJobs_restartDB = require('./app/cron-Jobs/restartDB');
+cronJobs_restartDB.restartDB();
 require("dotenv").config();
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
