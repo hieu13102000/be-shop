@@ -57,7 +57,6 @@ exports.signin = (req, res) => {
 
             if (!passwordIsValid) {
                 return res.status(401).send({
-                    accessToken: null,
                     message: "Invalid Password!"
                 });
             }
@@ -76,8 +75,8 @@ exports.signin = (req, res) => {
 
                 res.status(200).send({
                     userId: user.userId,
-                    username: user.username,
-                    email: user.email,
+                    username: user.userName,
+                    email: user.userEmail,
                     roles: authorities,
                     accessToken: token,
                     refreshToken: refreshToken,
@@ -131,7 +130,6 @@ exports.refreshToken = async (req, res) => {
 
         return res.status(200).json({
             accessToken: newAccessToken,
-            refreshToken: refreshToken.token,
         });
     } catch (err) {
         return res.status(500).send({ message: err });

@@ -32,7 +32,7 @@ const upload = (typeFile = "images") => {
                     const newStr = typeFile.charAt(0).toUpperCase() + typeFile.slice(1);
                     res.status(200).json({
                         message: `${newStr} uploaded successfully!`,
-                        imageUrl: publicUrl,
+                        url: publicUrl,
                     });
                 } catch (error) {
                     next(error);
