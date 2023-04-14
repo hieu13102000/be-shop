@@ -86,7 +86,7 @@
 *                 userId: 1
 *                 username: userExample,
 *                 email: userExample@gmail.com,
-*                 roles: ["ROLE_USER", "ROLE_MODERATOR"]
+*                 roles: ["user", "admin"]
 *                 accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgxMzczMTYxLCJleHAiOjE2ODEzNzY3NjF9.mWAMpCJDE4lel2-d9YZ5iIJEsJBNpmdrdBv8hVdT53M"
 *                 refreshToken: "a7c1c8a3-d725-4dfb-a31a-14bc8d63f39c"
 *       '401':

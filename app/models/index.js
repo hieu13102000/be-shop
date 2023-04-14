@@ -54,5 +54,5 @@ db.products.belongsTo(db.category, { foreignKey: 'categoryId', onDelete: 'cascad
 db.products.belongsTo(db.brand, { foreignKey: 'brandId', onDelete: 'cascade' });
 db.brand.hasMany(db.products, { foreignKey: 'brandId' });
 
-db.ROLES = ["user", "admin", "moderator"];
+db.ROLES = ["user", "admin", "superAdmin"];
 module.exports = db;

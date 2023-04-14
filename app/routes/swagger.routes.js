@@ -21,7 +21,7 @@ const options = {
         },
         servers: [
             {
-                url: "https://be-shop-yx0l.onrender.com",
+                url: "https://be-shop.cyclic.app",
                 description: "Production server"
             },
             {
@@ -41,12 +41,6 @@ const options = {
     },
     apis: routeFiles.map(routeFile => path.join(routesPath, routeFile)),
 };
-
-const customCss = `
-  .opblock-description-wrapper .markdown h4:nth-child(1) {
-    display: none;
-  }
-`;
 
 const specs = swaggerJsdoc(options);
 
