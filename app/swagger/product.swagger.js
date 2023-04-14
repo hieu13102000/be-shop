@@ -1,74 +1,86 @@
-
 /**
-* @swagger
-* /list-product:
-*   get:
-*     summary: Get product list
-*     tags:
-*       - Products
-*     parameters:
-*       - in: query
-*         description: page number
-*         name: page
-*         type: integer
-*         schema:
-*           type: integer
-*           minimum: 1
-*           maximum: 100
-*       - in: query
-*         name: pageSize
-*         type: integer
-*         description: Number of items per product page
-*         schema:
-*           type: integer
-*           minimum: 10
-*           maximum: 100
-*     responses:
-*       '200':
-*         description: Successful response
-*         content:
-*           application/json:
-*             schema:
-*               type: object
-*               properties:
-*                 data:
-*                   type: array
-*                   items:
-*                     type: object
-*                     properties:
-*                       productId:
-*                         type: number
-*                       productName:
-*                         type: string
-*                       productPrice:
-*                         type: number
-*                       productImage:
-*                         type: string
-*                       productMadeIn:
-*                         type: string
-*                       productSaleOff:
-*                         type: number
-*                       brandName:
-*                         type: string
-*                       categoryName:
-*                         type: string
-*             example:
-*               data: 
-*                 - productId: 5
-*                   productName: "hello01332"
-*                   productPrice: 100
-*                   productImage: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
-*                   productMadeIn: "hello"
-*                   productSaleOff: 5
-*                   brandName: "guchi"
-*                   categoryName: "son"
-*               currentPage: 1
-*               pageSize: 10
-*               totalItems: 1
-*               totalPages: 1
-*       '500':
-*          description: Error serve
-*/
+ * @swagger
+ * /list-product:
+ *   get:
+ *     summary: Get product list or can search by name or brand and also can search both at the same time
+ *     tags:
+ *       - Products
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         description: Page number
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           example: 1
+ *       - in: query
+ *         name: pageSize
+ *         description: Number of items per product page
+ *         schema:
+ *           type: integer
+ *           minimum: 10
+ *           maximum: 100
+ *           example: 20
+ *       - in: query
+ *         name: name
+ *         description: Product name
+ *         schema:
+ *           type: string
+ *           example: "Son Dior Rouge 999 Màu Đỏ Tươi"
+ *       - in: query
+ *         name: brand
+ *         description: Brand name
+ *         schema:
+ *           type: string
+ *           example: "Dior"
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       productId:
+ *                         type: number
+ *                       productName:
+ *                         type: string
+ *                       productPrice:
+ *                         type: number
+ *                       productImage:
+ *                         type: string
+ *                       productMadeIn:
+ *                         type: string
+ *                       productSaleOff:
+ *                         type: number
+ *                       brandName:
+ *                         type: string
+ *                       categoryName:
+ *                         type: string
+ *             example:
+ *               data:
+ *                 - productId: 5
+ *                   productName: "Son Dior Rouge 999 Màu Đỏ Tươi"
+ *                   productPrice: 100
+ *                   productImage: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
+ *                   productMadeIn: "Pháp"
+ *                   productSaleOff: 5
+ *                   brandName: "Dior"
+ *                   categoryName: "son"
+ *               currentPage: 1
+ *               pageSize: 10
+ *               totalItems: 1
+ *               totalPages: 1
+ *       '500':
+ *          description: Error serve
+ */
+
 
 /**
 * @swagger
@@ -116,12 +128,12 @@
 *                         type: string
 *             example:
 *                   productId: 5
-*                   productName: "hello01332"
+*                   productName: "Son Dior Rouge 999 Màu Đỏ Tươi"
 *                   productPrice: 100
 *                   productImage: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
-*                   productMadeIn: "hello"
+*                   productMadeIn: "Pháp"
 *                   productSaleOff: 5
-*                   brandName: "guchi"
+*                   brandName: "Dior"
 *                   categoryName: "son"
 *       '401':
 *         description: Cannot find Product with id.
@@ -160,42 +172,15 @@
 *               brandId:
 *                 type: integer
 *           example:
-*             name: "hello01332"
+*             name: "Son Dior Rouge 999 Màu Đỏ Tươi"
 *             price: "100"
 *             image: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
-*             madeIn: "hello"
+*             madeIn: "Pháp"
 *             categoryId: 1
 *             brandId: 1
 *     responses:
 *       '201':
 *         description: Product added successfully
-*         content:
-*           application/json:
-*             schema:
-*               type: object
-*               properties:
-*                 id:
-*                   type: integer
-*                 name:
-*                   type: string
-*                 price:
-*                   type: string
-*                 image:
-*                   type: string
-*                 madeIn:
-*                   type: string
-*                 categoryId:
-*                   type: integer
-*                 brandId:
-*                   type: integer
-*               example:
-*                 id: 1
-*                 name: "hello01332"
-*                 price: "100"
-*                 image: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
-*                 madeIn: "hello"
-*                 categoryId: 1
-*                 brandId: 1
 *       '401':
 *         description: Unauthorized! Access Token was expired!
 *       '403':
@@ -242,10 +227,10 @@
 *               brandId:
 *                 type: integer
 *           example:
-*             name: "hello01332"
+*             name: "Son Dior Rouge 999 Màu Đỏ Tươi"
 *             price: "100"
 *             image: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
-*             madeIn: "Mỹ"
+*             madeIn: "Pháp"
 *             categoryId: 1
 *             brandId: 1
 *     responses:

@@ -84,7 +84,7 @@ exports.getListProducts = (req, res) => {
           productImage: product.productImage,
           productMadeIn: product.productMadeIn,
           productSaleOff: product.productSaleOff,
-          brandName: product.brand ? product.brand.brandName : null,
+          brandName: product.brand ? product.brand.brandName.charAt(0).toUpperCase() + product.brand.brandName.slice(1) : null,
           categoryName: product.category ? product.category.categoryName : null,
         };
       });
