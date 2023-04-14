@@ -12,7 +12,7 @@ module.exports = function (app) {
   });
 
   // Api create a new Product
-  router.post("/create-product", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.create);
+  router.post("/create-product", [authJwt.verifyToken, authJwt.isSuperAdminOrAdmin], products.create);
 
   // Api get list Product
   router.get("/list-product", products.getListProducts);
@@ -21,13 +21,13 @@ module.exports = function (app) {
   router.get("/detail-product/:id", products.getDetailProduct);
 
   // Api update a Product with id
-  router.put("/update-product/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.update);
+  router.put("/update-product/:id", [authJwt.verifyToken, authJwt.isSuperAdminOrAdmin], products.update);
 
   // Api delete a Product with id
-  router.delete("/delete-product/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.delete);
+  router.delete("/delete-product/:id", [authJwt.verifyToken, authJwt.isSuperAdminOrAdmin], products.delete);
 
   // Api delete many products
-  router.delete("/delete-products", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], products.deleteAll);
+  router.delete("/delete-products", [authJwt.verifyToken, authJwt.isSuperAdminOrAdmin], products.deleteAll);
 
   app.use('/', router);
 };

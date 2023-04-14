@@ -54,34 +54,34 @@ isAdmin = async (req, res, next) => {
     }
 };
 
-isModerator = async (req, res, next) => {
+isSuperAdmin = async (req, res, next) => {
     try {
         const user = await User.findByPk(req.userId);
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
-            if (roles[i].roleName === "moderator") {
+            if (roles[i].roleName === "superAdmin") {
                 return next();
             }
         }
 
         return res.status(403).send({
-            message: "Require Moderator Role!",
+            message: "Require SuperAdmin Role!",
         });
     } catch (error) {
         return res.status(500).send({
-            message: "Unable to validate Moderator role!",
+            message: "Unable to validate SuperAdmin role!",
         });
     }
 };
 
-isModeratorOrAdmin = async (req, res, next) => {
+isSuperAdminOrAdmin = async (req, res, next) => {
     try {
         const user = await User.findByPk(req.userId);
         const roles = await user.getRoles();
 
         for (let i = 0; i < roles.length; i++) {
-            if (roles[i].roleName === "moderator") {
+            if (roles[i].roleName === "superAdmin") {
                 return next();
             }
 
@@ -91,11 +91,11 @@ isModeratorOrAdmin = async (req, res, next) => {
         }
 
         return res.status(403).send({
-            message: "Require Moderator or Admin Role!",
+            message: "Require superAdmin or Admin Role!",
         });
     } catch (error) {
         return res.status(500).send({
-            message: "Unable to validate Moderator or Admin role!",
+            message: "Unable to validate superAdmin or Admin role!",
         });
     }
 };
@@ -103,7 +103,7 @@ isModeratorOrAdmin = async (req, res, next) => {
 const authJwt = {
     verifyToken,
     isAdmin,
-    isModerator,
-    isModeratorOrAdmin,
+    isSuperAdmin,
+    isSuperAdminOrAdmin,
 };
 module.exports = authJwt;

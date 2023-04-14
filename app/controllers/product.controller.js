@@ -50,10 +50,18 @@ exports.create = [
 // get list Products from the database.
 exports.getListProducts = (req, res) => {
   const name = req.query.name;
+  const brand = req.query.brand;
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 10;
   const offset = (page - 1) * pageSize;
-  const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+  // search query by productName or brandName
+  const condition = {};
+  if (name) {
+    condition.productName = { [Op.like]: `%${name}%` };
+  }
+  if (brand) {
+    condition['$brand.brandName$'] = { [Op.eq]: brand };
+  }
 
   Product.findAndCountAll({
     where: condition,
