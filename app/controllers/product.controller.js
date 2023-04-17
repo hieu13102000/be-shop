@@ -6,6 +6,9 @@ const Category = db.category;
 const Op = db.Sequelize.Op;
 
 const { check, validationResult } = require('express-validator');
+const capitalizeFirst = (value) => {
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}
 // Create and Save a new Product
 exports.create = [
   // validate request using express-validator
@@ -24,7 +27,9 @@ exports.create = [
     // create a product
     const product = {
       productName: req.body.name,
-      productPrice: req.body.price,
+      productSaleOff: req.body.saleOff,
+      productOldPrice: req.body.price,
+      productPrice: (req.body.price * (100 - req.body.saleOff) / 100).toFixed(2),
       productImage: req.body.image,
       productMadeIn: req.body.madeIn,
       brandId: req.body.brandId,
@@ -81,10 +86,11 @@ exports.getListProducts = (req, res) => {
           productId: product.productId,
           productName: product.productName,
           productPrice: product.productPrice,
+          productOldPrice: product.productOldPrice,
           productImage: product.productImage,
           productMadeIn: product.productMadeIn,
           productSaleOff: product.productSaleOff,
-          brandName: product.brand ? product.brand.brandName.charAt(0).toUpperCase() + product.brand.brandName.slice(1) : null,
+          brandName: product.brand ? capitalizeFirst(product.brand.brandName) : null,
           categoryName: product.category ? product.category.categoryName : null,
         };
       });
@@ -120,10 +126,18 @@ exports.getDetailProduct = (req, res) => {
           productId: data.productId,
           productName: data.productName,
           productPrice: data.productPrice,
+          productOldPrice: data.productOldPrice,
+          productSaleOff: data.productSaleOff,
           productImage: data.productImage,
           productMadeIn: data.productMadeIn,
-          brandName: data.brand ? data.brand.brandName : null,
-          categoryName: data.category ? data.category.categoryName : null,
+          brand: data.brand ? {
+            "brandId": data.brand.brandId,
+            "brandName": capitalizeFirst(data.brand.brandName)
+          } : null,
+          category: data.category ? {
+            "categoryId": data.category.categoryId,
+            "categoryName": capitalizeFirst(data.category.categoryName)
+          } : null,
         };
         res.status(200).send(currentData);
       } else {
@@ -144,9 +158,11 @@ exports.update = (req, res) => {
   const id = req.params.id;
   const product = {
     productName: req.body.name,
-    productPrice: req.body.price,
     productImage: req.body.image,
     productMadeIn: req.body.madeIn,
+    productSaleOff: req.body.saleOff,
+    productOldPrice: req.body.price,
+    productPrice: (req.body.price * (100 - req.body.saleOff) / 100).toFixed(2),
     brandId: req.body.brandId,
     categoryId: req.body.categoryId,
   };

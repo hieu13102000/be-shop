@@ -48,17 +48,19 @@
  *                     type: object
  *                     properties:
  *                       productId:
- *                         type: number
+ *                         type: integer
  *                       productName:
  *                         type: string
  *                       productPrice:
  *                         type: number
+ *                       productOldPrice:
+*                         type: number
  *                       productImage:
  *                         type: string
  *                       productMadeIn:
  *                         type: string
  *                       productSaleOff:
- *                         type: number
+ *                         type: integer
  *                       brandName:
  *                         type: string
  *                       categoryName:
@@ -68,9 +70,10 @@
  *                 - productId: 5
  *                   productName: "Son Dior Rouge 999 Màu Đỏ Tươi"
  *                   productPrice: 100
+ *                   productOldPrice: 100
  *                   productImage: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
  *                   productMadeIn: "Pháp"
- *                   productSaleOff: 5
+ *                   productSaleOff: 0
  *                   brandName: "Dior"
  *                   categoryName: "son"
  *               currentPage: 1
@@ -111,30 +114,47 @@
 *                     type: object
 *                     properties:
 *                       productId:
-*                         type: number
+*                         type: integer
 *                       productName:
 *                         type: string
 *                       productPrice:
+*                         type: number
+*                       productOldPrice:
 *                         type: number
 *                       productImage:
 *                         type: string
 *                       productMadeIn:
 *                         type: string
 *                       productSaleOff:
-*                         type: null
-*                       brandName:
-*                         type: string
-*                       categoryName:
-*                         type: string
+*                         type: integer
+*                       brand:
+*                         type: object
+*                         properties:
+*                           brandId:
+*                             type: integer
+*                           brandName:
+*                             type: string
+*                       category:
+*                         type: object
+*                         properties:
+*                           categoryId:
+*                             type: integer
+*                           categoryName:
+*                             type: string
 *             example:
-*                   productId: 5
-*                   productName: "Son Dior Rouge 999 Màu Đỏ Tươi"
-*                   productPrice: 100
-*                   productImage: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
-*                   productMadeIn: "Pháp"
-*                   productSaleOff: 5
-*                   brandName: "Dior"
-*                   categoryName: "son"
+*               productId: 5
+*               productName: Son Dior Rouge 999 Màu Đỏ Tươi
+*               productPrice: 100
+*               productOldPrice: 100
+*               productImage: https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2
+*               productMadeIn: Pháp
+*               productSaleOff: 0
+*               brand: 
+*                 brandId: 1
+*                 brandName: Gucci
+*               category: 
+*                 categoryId: 1
+*                 categoryName: Son
 *       '401':
 *         description: Cannot find Product with id.
 *       '500':
@@ -163,6 +183,8 @@
 *                 type: string
 *               price:
 *                 type: string
+*               saleOff:
+*                 type: integer
 *               image:
 *                 type: string
 *               madeIn:
@@ -173,7 +195,8 @@
 *                 type: integer
 *           example:
 *             name: "Son Dior Rouge 999 Màu Đỏ Tươi"
-*             price: "100"
+*             price: 100
+*             saleOff: 10
 *             image: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
 *             madeIn: "Pháp"
 *             categoryId: 1
@@ -217,7 +240,9 @@
 *               name:
 *                 type: string
 *               price:
-*                 type: string
+*                 type: number
+*               saleOff:
+*                 type: integer
 *               image:
 *                 type: string
 *               madeIn:
@@ -228,7 +253,8 @@
 *                 type: integer
 *           example:
 *             name: "Son Dior Rouge 999 Màu Đỏ Tươi"
-*             price: "100"
+*             price: 100
+*             saleOff: 10
 *             image: "https://firebasestorage.googleapis.com/v0/b/webshop-a5ab0.appspot.com/o/add.png?alt=media&token=1cc404b4-4ab2-4bc3-afcd-f3de66dec8f2"
 *             madeIn: "Pháp"
 *             categoryId: 1
@@ -295,7 +321,7 @@
   *               productIds:
   *                 type: array
   *                 items:
-  *                   type: number
+  *                   type: integer
 *           example:
 *              productIds: [1,2,3]
 *     responses:
