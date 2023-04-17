@@ -52,8 +52,8 @@ exports.getListProducts = (req, res) => {
   const name = req.query.name;
   const brand = req.query.brand;
   const page = parseInt(req.query.page) || 1;
-  const pageSize = parseInt(req.query.pageSize) || 10;
-  const offset = (page - 1) * pageSize;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
   // search query by productName or brandName
   const condition = {};
   if (name) {
@@ -72,7 +72,7 @@ exports.getListProducts = (req, res) => {
       model: Category,
       attributes: ['categoryName']
     }],
-    limit: pageSize,
+    limit: limit,
     offset: offset
   })
     .then(data => {
@@ -89,12 +89,12 @@ exports.getListProducts = (req, res) => {
         };
       });
       const totalItems = data.count;
-      const totalPages = Math.ceil(totalItems / pageSize);
+      const totalPages = Math.ceil(totalItems / limit);
 
       res.status(200).send({
         data: currentData,
         currentPage: page,
-        pageSize: pageSize,
+        limit: limit,
         totalItems: totalItems,
         totalPages: totalPages,
       });

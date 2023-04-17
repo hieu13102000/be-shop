@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT
     },
     productImage: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     productMadeIn: {
       type: DataTypes.STRING

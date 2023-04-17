@@ -15,7 +15,7 @@
  *           maximum: 100
  *           example: 1
  *       - in: query
- *         name: pageSize
+ *         name: limit
  *         description: Number of items per product page
  *         schema:
  *           type: integer
@@ -74,7 +74,7 @@
  *                   brandName: "Dior"
  *                   categoryName: "son"
  *               currentPage: 1
- *               pageSize: 10
+ *               limit: 10
  *               totalItems: 1
  *               totalPages: 1
  *       '500':

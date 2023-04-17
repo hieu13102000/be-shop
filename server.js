@@ -7,7 +7,8 @@ const cookieSession = require("cookie-session");
 const app = express();
 
 var corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:4200"]
+  origin: ["http://localhost:3000", "http://localhost:4200",
+    'https://shop-ui-one.vercel.app']
 };
 
 app.use(cors(corsOptions));
