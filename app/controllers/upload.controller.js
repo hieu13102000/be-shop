@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const { storage } = require('../config/firebase.config');
 
 const upload = (typeFile = "images") => {
@@ -10,8 +11,9 @@ const upload = (typeFile = "images") => {
             const file = req.file;
 
             const bucket = storage.bucket();
+            const filename = `${typeFile}/${uuid.v4()}`;
 
-            const blob = bucket.file(`${typeFile}/file.originalname`);
+            const blob = bucket.file(filename);
 
             const blobStream = blob.createWriteStream({
                 metadata: {
