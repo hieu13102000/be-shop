@@ -6,9 +6,7 @@ const Category = db.category;
 const Op = db.Sequelize.Op;
 
 const { check, validationResult } = require('express-validator');
-const capitalizeFirst = (value) => {
-  return value.charAt(0).toUpperCase() + value.slice(1)
-}
+
 // Create and Save a new Product
 exports.create = [
   // validate request using express-validator
@@ -90,7 +88,7 @@ exports.getListProducts = (req, res) => {
           productImage: product.productImage,
           productMadeIn: product.productMadeIn,
           productSaleOff: product.productSaleOff,
-          brandName: product.brand ? capitalizeFirst(product.brand.brandName) : null,
+          brandName: product.brand ? product.brand.brandName : null,
           categoryName: product.category ? product.category.categoryName : null,
         };
       });
@@ -132,11 +130,11 @@ exports.getDetailProduct = (req, res) => {
           productMadeIn: data.productMadeIn,
           brand: data.brand ? {
             "brandId": data.brand.brandId,
-            "brandName": capitalizeFirst(data.brand.brandName)
+            "brandName": data.brand.brandName
           } : null,
           category: data.category ? {
             "categoryId": data.category.categoryId,
-            "categoryName": capitalizeFirst(data.category.categoryName)
+            "categoryName": data.category.categoryName
           } : null,
         };
         res.status(200).send(currentData);

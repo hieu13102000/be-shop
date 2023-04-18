@@ -8,7 +8,7 @@ const app = express();
 
 var corsOptions = {
   origin: ["http://localhost:3000", "http://localhost:4200",
-    'https://shop-ui-one.vercel.app']
+    'https://shop-ui-one.vercel.app', 'https://fast-food-blush.vercel.app']
 };
 
 app.use(cors(corsOptions));
